@@ -38,9 +38,6 @@ class CinemaVM: ObservableObject {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = headers
         
-        // Debugging: Print request headers
-        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
-        print("here \(request)")
         URLSession.shared.dataTaskPublisher(for: request)
             .subscribe(on: DispatchQueue.global(qos: .background))
             .receive(on: DispatchQueue.main)
@@ -67,6 +64,25 @@ class CinemaVM: ObservableObject {
             })
             .store(in: &cancellables)
     }
+    
+    
+    func getPosterURL(posterPath: String?) -> URL? {
+        guard let posterPath = posterPath else {
+            return nil
+        }
+        
+        let baseURL = "https://image.tmdb.org/t/p/"
+        let imageSize = "original"
+
+        let fullURLString = baseURL + imageSize + posterPath
+        
+        if let fullURL = URL(string: fullURLString) {
+            return fullURL
+        } else {
+            return nil
+        }
+    }
+    
 }
 
 

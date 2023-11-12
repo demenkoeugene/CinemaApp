@@ -11,8 +11,12 @@ struct CinemaResponse: Decodable {
     let dates: DateRange
     let page: Int
     let results: [CinemaModel]
-    let total_pages: Int
-    let total_results: Int
+    let totalPages: Int
+    let totalResult: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case dates, page, results, totalPages = "total_pages", totalResult = "total_results"
+    }
 }
 
 struct DateRange: Decodable {
