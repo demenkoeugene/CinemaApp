@@ -64,28 +64,44 @@ class CinemaVM: ObservableObject {
             })
             .store(in: &cancellables)
     }
-    
-    
-    func getPosterURL(posterPath: String?) -> URL? {
-        guard let posterPath = posterPath else {
-            return nil
-        }
-        
-        let baseURL = "https://image.tmdb.org/t/p/"
-        let imageSize = "original"
-
-        let fullURLString = baseURL + imageSize + posterPath
-        
-        if let fullURL = URL(string: fullURLString) {
-            return fullURL
-        } else {
-            return nil
-        }
-    }
-    
+}
+struct GenresConfig{
+    static let genres: [String: Int] = [
+        "Action": 28,
+        "Adventure": 12,
+        "Animation": 16,
+        "Comedy": 35,
+        "Crime": 80,
+        "Documentary": 99,
+        "Drama": 18,
+        "Family": 10751,
+        "Fantasy": 14,
+        "History": 36,
+        "Horror": 27,
+        "Music": 10402,
+        "Mystery": 9648,
+        "Romance": 10749,
+        "Science Fiction": 878,
+        "TV Movie": 10770,
+        "Thriller": 53,
+        "War": 10752,
+        "Western": 37
+    ]
 }
 
-
+struct FormatReleaseData{
+    static func formatReleaseDate(_ dateString: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        if let date = dateFormatter.date(from: dateString) {
+            dateFormatter.dateFormat = "d MMM yyyy"
+            return dateFormatter.string(from: date)
+        }
+        
+        return "Invalid Date"
+    }
+}
 
 //to work with api_token
 struct Config {

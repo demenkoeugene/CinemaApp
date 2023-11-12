@@ -8,66 +8,6 @@
 import SwiftUI
 import Combine
 
-
-class ImageCache {
-    static var cache: [URL: UIImage] = [:]
-}
-
-class ImageLoader: ObservableObject {
-    @Published var image: UIImage?
-    private var cancellable: AnyCancellable?
-    
-    func loadImage(from url: URL) {
-        if let cachedImage = ImageCache.cache[url] {
-            image = cachedImage
-        } else {
-            cancellable = URLSession.shared.dataTaskPublisher(for: url)
-                .map(\.data)
-                .compactMap { UIImage(data: $0) }
-                .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: { _ in },
-                      receiveValue: { [weak self] in
-                    ImageCache.cache[url] = $0
-                    self?.image = $0
-                })
-        }
-    }
-}
-
-struct AsyncImageWithCombine: View {
-    let url: URL
-    @ObservedObject private var imageLoader = ImageLoader()
-    
-    var body: some View {
-        Group {
-            if let image = imageLoader.image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 350, height: 200)
-                    .overlay(
-                        LinearGradient(
-                            gradient: Gradient(colors: [.clear, .black]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .frame(height: 150)
-                        .offset(y: 40)
-                    )
-                    .cornerRadius(10)
-            } else {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .onAppear(perform: loadImage)
-            }
-        }
-    }
-    
-    private func loadImage() {
-        imageLoader.loadImage(from: url)
-    }
-}
-
 struct ContentView: View {
     @StateObject var vm = CinemaVM()
     
@@ -75,16 +15,19 @@ struct ContentView: View {
         NavigationView {
             ScrollView {
                 ForEach(vm.cinemaItem) { cinema in
-                    CinemaView(vm: vm, cinemaItem: cinema)
+                    NavigationLink(destination: CinemaDetailView(cinemaItem: cinema)) {
+                        CinemaView(cinemaItem: cinema)
+                    }
                 }
             }
             .navigationTitle("Now Playing")
         }
     }
+    
 }
 
 struct CinemaView: View {
-    var vm: CinemaVM
+    var vm: ImageLoader = ImageLoader()
     var cinemaItem: CinemaModel
     
     var body: some View {
@@ -95,11 +38,13 @@ struct CinemaView: View {
                 Text("No poster available")
             }
             VStack(alignment: .leading){
-                Text("\(cinemaItem.popularity)")
+                Text("\(Image(systemName: "star.fill")) \(String(format: "%.1f", cinemaItem.voteAverage))")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
-                    .padding(20)
+                    .padding(.bottom, 10)
+                    .padding(.leading, 30)
+                    .offset(y: 40)
                 
                 HStack(alignment: .center) {
                     Text(cinemaItem.title)
@@ -109,18 +54,37 @@ struct CinemaView: View {
                         .foregroundColor(.white)
                         .padding(10)
                     Spacer()
-                    Text(cinemaItem.releaseDate)
-                        .font(.caption)
-                        .fontWeight(.semibold)
+                    Text(FormatReleaseData.formatReleaseDate(cinemaItem.releaseDate))
+                        .font(.callout)
+                        .fontWeight(.bold)
                         .foregroundColor(.white)
                         .padding(10)
                 }
                 .padding(20)
             }
-            .offset(y: 50)
+            .offset(y: 45)
         }
     }
+    
+  
 }
+
+
+
+
+struct AsyncImageWithCombine: View {
+    let url: URL
+
+    var body: some View {
+        AsyncImageView(
+            url: url,
+            content: .custom1,
+            width: 350,
+            height: 200
+        )
+    }
+}
+
 
 #Preview {
     ContentView()

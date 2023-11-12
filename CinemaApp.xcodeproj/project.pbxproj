@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F65462972B013F7F009EC37F /* ImageCinemaVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65462962B013F7F009EC37F /* ImageCinemaVM.swift */; };
+		F65462992B014229009EC37F /* CinemaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65462982B014229009EC37F /* CinemaDetailView.swift */; };
+		F654629B2B015FAC009EC37F /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F654629A2B015FAC009EC37F /* AsyncImageView.swift */; };
 		F66C55422AFE4C1F0042F6D2 /* CinemaAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66C55412AFE4C1F0042F6D2 /* CinemaAppApp.swift */; };
 		F66C55442AFE4C1F0042F6D2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66C55432AFE4C1F0042F6D2 /* ContentView.swift */; };
 		F66C55462AFE4C200042F6D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F66C55452AFE4C200042F6D2 /* Assets.xcassets */; };
@@ -17,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F65462962B013F7F009EC37F /* ImageCinemaVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCinemaVM.swift; sourceTree = "<group>"; };
+		F65462982B014229009EC37F /* CinemaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaDetailView.swift; sourceTree = "<group>"; };
+		F654629A2B015FAC009EC37F /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
 		F66C553E2AFE4C1F0042F6D2 /* CinemaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CinemaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F66C55412AFE4C1F0042F6D2 /* CinemaAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaAppApp.swift; sourceTree = "<group>"; };
 		F66C55432AFE4C1F0042F6D2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,6 +65,9 @@
 			children = (
 				F66C55412AFE4C1F0042F6D2 /* CinemaAppApp.swift */,
 				F66C55432AFE4C1F0042F6D2 /* ContentView.swift */,
+				F65462982B014229009EC37F /* CinemaDetailView.swift */,
+				F654629A2B015FAC009EC37F /* AsyncImageView.swift */,
+				F65462962B013F7F009EC37F /* ImageCinemaVM.swift */,
 				F66F15A02B0009B800BC71E5 /* CinemaVM.swift */,
 				F66F15A22B000F1900BC71E5 /* CinemaModel.swift */,
 				F66F15A52B003C1200BC71E5 /* Config.plist */,
@@ -147,10 +156,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F65462992B014229009EC37F /* CinemaDetailView.swift in Sources */,
 				F66F15A12B0009B800BC71E5 /* CinemaVM.swift in Sources */,
 				F66C55442AFE4C1F0042F6D2 /* ContentView.swift in Sources */,
 				F66F15A32B000F1900BC71E5 /* CinemaModel.swift in Sources */,
 				F66C55422AFE4C1F0042F6D2 /* CinemaAppApp.swift in Sources */,
+				F65462972B013F7F009EC37F /* ImageCinemaVM.swift in Sources */,
+				F654629B2B015FAC009EC37F /* AsyncImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
