@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 struct ContentView: View {
     @StateObject var vm = CinemaVM()
@@ -22,9 +21,12 @@ struct ContentView: View {
             }
             .navigationTitle("Now Playing")
         }
+        .refreshable {
+            vm.fetchData()
+        }
     }
-    
 }
+
 
 struct CinemaView: View {
     var vm: ImageLoader = ImageLoader()

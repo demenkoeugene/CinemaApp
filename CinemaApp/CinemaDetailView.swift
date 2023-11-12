@@ -14,7 +14,7 @@ struct CinemaDetailView: View {
     
     var body: some View {
         ScrollView{
-            ZStack{
+            ZStack(alignment: .bottom){
                 posterView()
                 HStack(alignment: .center){
                     Text(cinemaItem.title)
