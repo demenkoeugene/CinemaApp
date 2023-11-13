@@ -8,8 +8,16 @@
 import Foundation
 import Combine
 
+enum NetworkRequestState {
+    case idle
+    case loading
+    case loaded
+    case failed(URLError)
+}
+
 class CinemaVM: ObservableObject {
-    @Published var cinemaItem: [CinemaModel]  = []
+    @Published var cinemaItem: [CinemaModel] = []
+    @Published var networkRequestState: NetworkRequestState = .idle
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -38,6 +46,9 @@ class CinemaVM: ObservableObject {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = headers
         
+        // Update networkRequestState to .loading when the request starts
+        networkRequestState = .loading
+        
         URLSession.shared.dataTaskPublisher(for: request)
             .subscribe(on: DispatchQueue.global(qos: .background))
             .receive(on: DispatchQueue.main)
@@ -49,15 +60,21 @@ class CinemaVM: ObservableObject {
                 return data
             }
             .decode(type: CinemaResponse.self, decoder: JSONDecoder())
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
+                    self?.networkRequestState = .loaded
                     break
                 case .failure(let error):
                     if let urlError = error as? URLError {
-                        print("URL Error Code: \(urlError.code.rawValue)")
+                        if urlError.code == .notConnectedToInternet {
+                            print("Not connected to the internet.")
+                        }
+                        // Update networkRequestState to .failed with the specific error
+                        self?.networkRequestState = .failed(urlError)
+                    } else {
+                        print("Error: \(error)")
                     }
-                    print("Error here: \(error)")
                 }
             }, receiveValue: { [weak self] (cinemaResponse) in
                 self?.cinemaItem = cinemaResponse.results
@@ -65,6 +82,7 @@ class CinemaVM: ObservableObject {
             .store(in: &cancellables)
     }
 }
+
 struct GenresConfig{
     static let genres: [String: Int] = [
         "Action": 28,

@@ -72,7 +72,6 @@ struct SharedImageModifier: ViewModifier {
                             endPoint: .bottom
                         )
                     }
-                   
             )
         }
     }

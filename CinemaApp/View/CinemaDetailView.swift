@@ -31,16 +31,12 @@ struct CinemaDetailView: View {
                     .padding(.bottom, 10)
                 
                 Text("Release date")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.gray)
-                    .padding(.bottom, 10)
+                    .modifier(SectionText())
                 Text(FormatReleaseData.formatReleaseDate(cinemaItem.releaseDate))
                     .padding(.bottom, 10)
                 
                 Text("Genre")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.gray)
-                    .padding(.bottom, 10)
+                    .modifier(SectionText())
                 Text(GenresConfig.genres.compactMap { (name, id) in
                     cinemaItem.genreIds.contains(id) ? name : nil
                 }.joined(separator: ", "))
@@ -48,14 +44,11 @@ struct CinemaDetailView: View {
                 
                 
                 Text("Overview")
-                    .fontWeight(.bold)
-                    .foregroundStyle(.gray)
-                    .padding(.bottom, 10)
+                    .modifier(SectionText())
                 Text(cinemaItem.overview)
             }
             .frame(maxWidth: 350)
             .padding(30)
-            
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: CustomBackButton())
@@ -65,23 +58,25 @@ struct CinemaDetailView: View {
     @ViewBuilder
     func posterView() -> some View {
         if let posterURL = vm.getPosterURL(posterPath: cinemaItem.backdropPath) {
-            AsyncImageWithCombineDetail(url: posterURL)
+            AsyncImageView(
+                url: posterURL,
+                content: .custom2,
+                width: 350,
+                height: 350
+            )
         } else {
             Text("No poster available")
         }
     }
 }
 
-struct AsyncImageWithCombineDetail: View {
-    let url: URL
-    
-    var body: some View {
-        AsyncImageView(
-            url: url,
-            content: .custom2,
-            width: 350,
-            height: 350
-        )
+///MARK  - Custom components section
+struct SectionText: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.headline)
+            .foregroundStyle(.gray)
+            .padding(.bottom, 10)
     }
 }
 
@@ -98,9 +93,6 @@ struct CustomBackButton: View {
         }
     }
 }
-
-
-
 
 #Preview {
     let cinemaSample = CinemaModel(adult: true,

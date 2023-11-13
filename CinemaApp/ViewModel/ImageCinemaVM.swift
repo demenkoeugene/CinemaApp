@@ -11,6 +11,10 @@ import SwiftUI
 
 class ImageCache {
     static var cache: [URL: UIImage] = [:]
+    
+    static func clearCache() {
+        cache.removeAll()
+    }
 }
 
 class ImageLoader: ObservableObject {
@@ -32,7 +36,7 @@ class ImageLoader: ObservableObject {
                 })
         }
     }
-
+    
     func getPosterURL(posterPath: String?) -> URL? {
         guard let posterPath = posterPath else {
             return nil
@@ -40,7 +44,7 @@ class ImageLoader: ObservableObject {
         
         let baseURL = "https://image.tmdb.org/t/p/"
         let imageSize = "original"
-
+        
         let fullURLString = baseURL + imageSize + posterPath
         
         if let fullURL = URL(string: fullURLString) {
