@@ -21,6 +21,10 @@ The app requires a minimum iOS version of 15.0.
 
   
 ## Screenshots
+<div align="center">
+    <img src="https://github.com/demenkoeugene/CinemaApp/assets/110675494/dfbaa73b-5425-48da-aebb-454efbfc7b5d" alt="Screenshot 1" width="300">
+    <img src="https://github.com/demenkoeugene/CinemaApp/assets/110675494/a66267fa-62e4-476d-8f9b-51dce7abf031" alt="Screenshot 2" width="300">
+</div>
 
 
 
