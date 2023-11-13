@@ -27,12 +27,13 @@ class ImageLoader: ObservableObject {
         } else {
             cancellable = URLSession.shared.dataTaskPublisher(for: url)
                 .map(\.data)
+                .subscribe(on: DispatchQueue.global(qos: .background)) // Perform initial image processing on a background queue
                 .compactMap { UIImage(data: $0) }
                 .receive(on: DispatchQueue.main)
                 .sink(receiveCompletion: { _ in },
-                      receiveValue: { [weak self] in
-                    ImageCache.cache[url] = $0
-                    self?.image = $0
+                      receiveValue: { [weak self] loadedImage in
+                    ImageCache.cache[url] = loadedImage
+                    self?.image = loadedImage
                 })
         }
     }

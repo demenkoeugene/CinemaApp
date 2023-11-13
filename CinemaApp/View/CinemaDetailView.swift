@@ -70,7 +70,7 @@ struct CinemaDetailView: View {
     }
 }
 
-///MARK  - Custom components section
+//MARK: - Custom components section
 struct SectionText: ViewModifier {
     func body(content: Content) -> some View {
         content

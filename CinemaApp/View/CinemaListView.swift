@@ -59,7 +59,7 @@ struct CinemaListView: View {
     }
     
     var listCinema: some View {
-        VStack {
+        LazyVStack {
             ForEach(vm.cinemaItem) { cinema in
                 NavigationLink(destination: CinemaDetailView(cinemaItem: cinema)) {
                     CinemaCardView(cinemaItem: cinema)
