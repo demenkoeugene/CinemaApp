@@ -20,13 +20,14 @@ class CinemaVM: ObservableObject {
     @Published var networkRequestState: NetworkRequestState = .idle
     
     private var cancellables: Set<AnyCancellable> = []
+    private var currentPage = 1
     
     init() {
         fetchData()
     }
     
     func fetchData() {
-        guard let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1") else {
+        guard let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=\(currentPage)") else {
             print("Invalid URL")
             return
         }
@@ -46,7 +47,6 @@ class CinemaVM: ObservableObject {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = headers
         
-        // Update networkRequestState to .loading when the request starts
         networkRequestState = .loading
         
         URLSession.shared.dataTaskPublisher(for: request)
@@ -70,16 +70,22 @@ class CinemaVM: ObservableObject {
                         if urlError.code == .notConnectedToInternet {
                             print("Not connected to the internet.")
                         }
-                        // Update networkRequestState to .failed with the specific error
                         self?.networkRequestState = .failed(urlError)
                     } else {
                         print("Error: \(error)")
                     }
                 }
             }, receiveValue: { [weak self] (cinemaResponse) in
-                self?.cinemaItem = cinemaResponse.results
+                self?.cinemaItem.append(contentsOf: cinemaResponse.results)
             })
             .store(in: &cancellables)
+        
+        currentPage += 1
+    }
+    
+    func resetData() {
+        currentPage = 1
+        cinemaItem.removeAll()
     }
 }
 

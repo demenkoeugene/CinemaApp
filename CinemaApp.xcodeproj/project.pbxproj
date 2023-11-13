@@ -10,6 +10,7 @@
 		F65462972B013F7F009EC37F /* ImageCinemaVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65462962B013F7F009EC37F /* ImageCinemaVM.swift */; };
 		F65462992B014229009EC37F /* CinemaDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65462982B014229009EC37F /* CinemaDetailView.swift */; };
 		F654629B2B015FAC009EC37F /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F654629A2B015FAC009EC37F /* AsyncImageView.swift */; };
+		F65462A22B027BC7009EC37F /* CinemaCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65462A12B027BC7009EC37F /* CinemaCardView.swift */; };
 		F66C55422AFE4C1F0042F6D2 /* CinemaAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66C55412AFE4C1F0042F6D2 /* CinemaAppApp.swift */; };
 		F66C55442AFE4C1F0042F6D2 /* CinemaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66C55432AFE4C1F0042F6D2 /* CinemaListView.swift */; };
 		F66C55462AFE4C200042F6D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F66C55452AFE4C200042F6D2 /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 		F65462962B013F7F009EC37F /* ImageCinemaVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCinemaVM.swift; sourceTree = "<group>"; };
 		F65462982B014229009EC37F /* CinemaDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaDetailView.swift; sourceTree = "<group>"; };
 		F654629A2B015FAC009EC37F /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
+		F65462A12B027BC7009EC37F /* CinemaCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaCardView.swift; sourceTree = "<group>"; };
 		F66C553E2AFE4C1F0042F6D2 /* CinemaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CinemaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F66C55412AFE4C1F0042F6D2 /* CinemaAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaAppApp.swift; sourceTree = "<group>"; };
 		F66C55432AFE4C1F0042F6D2 /* CinemaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaListView.swift; sourceTree = "<group>"; };
@@ -50,6 +52,7 @@
 				F66C55432AFE4C1F0042F6D2 /* CinemaListView.swift */,
 				F65462982B014229009EC37F /* CinemaDetailView.swift */,
 				F654629A2B015FAC009EC37F /* AsyncImageView.swift */,
+				F65462A12B027BC7009EC37F /* CinemaCardView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F65462992B014229009EC37F /* CinemaDetailView.swift in Sources */,
+				F65462A22B027BC7009EC37F /* CinemaCardView.swift in Sources */,
 				F66F15A12B0009B800BC71E5 /* CinemaVM.swift in Sources */,
 				F66C55442AFE4C1F0042F6D2 /* CinemaListView.swift in Sources */,
 				F66F15A32B000F1900BC71E5 /* CinemaModel.swift in Sources */,
