@@ -35,16 +35,15 @@ final class CinemaVM: ObservableObject {
     private var currentPage = 1
     
     init() {
-        fetchData()
-        
         $searchQuery
-            .debounce(for: 0.3, scheduler: DispatchQueue.main)
-            .map { searchQuery in
-                return self.cinemaItem.filter { movie in
+            .combineLatest($cinemaItem)
+            .map { searchQuery, cinemaItem in
+                return cinemaItem.filter { movie in
                     return movie.title.lowercased().contains(searchQuery.lowercased())
                 }
             }
             .assign(to: &$searchResults)
+
     }
     
     func fetchData() {

@@ -45,6 +45,9 @@ struct CinemaListView: View {
                 .padding(16)
             }
         }
+        onAppear{
+            vm.fetchData()
+        }
         .refreshable {
             ImageCache.clearCache()
             vm.resetData()
