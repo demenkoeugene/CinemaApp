@@ -11,12 +11,39 @@ struct CinemaListView: View {
     
     @StateObject var vm = CinemaVM()
     
+    @State var visiableItems: Set<UUID> = Set()
     @State private var isLoadMoreButtonHidden = false
     
     var body: some View {
         NavigationView {
-            content
-                .navigationTitle("Now Playing")
+            ZStack(alignment: .bottomTrailing) {
+                
+                VStack {
+                    HStack {
+                        TextField("Search", text: $vm.searchQuery)
+                            .padding(8)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(8)
+                    }
+                    .padding([.leading, .trailing], 16)
+                    
+                    content
+                        .navigationTitle("Now Playing")
+                }
+                
+                Button {
+                    withAnimation {
+                        
+                    }
+                } label: {
+                    Image(systemName: "arrow.up")
+                        .padding(12)
+                        .foregroundColor(.white)
+                        .background(.gray)
+                        .clipShape(Circle())
+                }
+                .padding(16)
+            }
         }
         .refreshable {
             ImageCache.clearCache()
@@ -60,7 +87,7 @@ struct CinemaListView: View {
     
     var listCinema: some View {
         LazyVStack {
-            ForEach(vm.cinemaItem) { cinema in
+            ForEach(vm.movies) { cinema in
                 NavigationLink(destination: CinemaDetailView(cinemaItem: cinema)) {
                     CinemaCardView(cinemaItem: cinema)
                 }

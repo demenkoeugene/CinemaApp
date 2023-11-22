@@ -15,15 +15,36 @@ enum NetworkRequestState {
     case failed(URLError)
 }
 
-class CinemaVM: ObservableObject {
+final class CinemaVM: ObservableObject {
     @Published var cinemaItem: [CinemaModel] = []
     @Published var networkRequestState: NetworkRequestState = .idle
+    
+    @Published var searchQuery: String = ""
+    @Published var searchResults: [CinemaModel] = []
+    
+    
+    var movies: [CinemaModel] {
+        if searchQuery.isEmpty {
+            return cinemaItem
+        } else {
+            return searchResults
+        }
+    }
     
     private var cancellables: Set<AnyCancellable> = []
     private var currentPage = 1
     
     init() {
         fetchData()
+        
+        $searchQuery
+            .debounce(for: 0.3, scheduler: DispatchQueue.main)
+            .map { searchQuery in
+                return self.cinemaItem.filter { movie in
+                    return movie.title.lowercased().contains(searchQuery.lowercased())
+                }
+            }
+            .assign(to: &$searchResults)
     }
     
     func fetchData() {
