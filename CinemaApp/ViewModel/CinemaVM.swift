@@ -35,6 +35,7 @@ final class CinemaVM: ObservableObject {
     private var currentPage = 1
     
     init() {
+        fetchData()
         $searchQuery
             .combineLatest($cinemaItem)
             .map { searchQuery, cinemaItem in

@@ -23,7 +23,9 @@ class ImageLoader: ObservableObject {
     
     func loadImage(from url: URL) {
         if let cachedImage = ImageCache.cache[url] {
+           
             image = cachedImage
+            
         } else {
             cancellable = URLSession.shared.dataTaskPublisher(for: url)
                 .map(\.data)
