@@ -24,6 +24,7 @@ final class CinemaVM: ObservableObject {
     
     @Published var filterByRating: Bool = false
     @Published var filterByAlphabet: Bool = false
+    @Published var filterByDate: Bool = false
     
     var movies: [CinemaModel] {
         var filteredMovies = cinemaItem
@@ -39,6 +40,10 @@ final class CinemaVM: ObservableObject {
         
         if filterByAlphabet {
             filteredMovies = filteredMovies.sorted { $0.title < $1.title }
+        }
+        
+        if filterByDate {
+            filteredMovies = filteredMovies.sorted { $0.releaseDate > $1.releaseDate }
         }
         
         return filteredMovies

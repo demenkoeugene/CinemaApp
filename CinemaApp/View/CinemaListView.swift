@@ -11,15 +11,12 @@ struct CinemaListView: View {
     
     @StateObject var vm = CinemaVM()
     @State private var isLoadMoreButtonHidden = false
-//    @State var scrollViewOffset: CGFloat = 0
-//    @State var startOffset: CGFloat = 0
+
     
     @State private var isFilterSheetPresented = false
     
     var body: some View {
         NavigationView {
-//            ZStack(alignment: .bottomTrailing) {
-                
                 VStack {
                     HStack {
                         TextField("Search", text: $vm.searchQuery)
@@ -39,30 +36,13 @@ struct CinemaListView: View {
                             CinemaOptionView(vm: vm)
                         }
                     }
-                    .padding([.leading, .trailing], 16)
+                   
                     
                     content
                         .navigationTitle("Now Playing")
                 }
-//                
-//                Button {
-//                    withAnimation(.spring()){
-//                        // proxyReader.scroll("SCROLL_TO_TOP", anchor: .top)
-//                    }
-//                } label: {
-//                    Image(systemName: "arrow.up")
-//                        .padding(12)
-//                        .foregroundColor(.white)
-//                        .background(.gray)
-//                        .clipShape(Circle())
-//                }
                 .padding(16)
-//                .opacity(
-//                    withAnimation(.easeInOut){
-//                        -scrollViewOffset > 450 ? 1 : 0
-//                    }
-//                )
-            
+                .ignoresSafeArea(.all, edges: .bottom)
         }
         .refreshable {
             ImageCache.clearCache()
@@ -84,17 +64,13 @@ struct CinemaListView: View {
                         .frame(width: geometry.size.width)
                         .frame(minHeight: geometry.size.height)
                 case .loaded:
-                    
-                    
                     listCinema
-                    
-                    
-                    
                 case .failed(let error):
                     failedView(error: error, geometry: geometry)
                 }
                 
             }
+            .ignoresSafeArea(.all, edges: .bottom)
         }
     }
     
@@ -123,19 +99,6 @@ struct CinemaListView: View {
                 loadMoreButton
             }
         }
-        //        .id("SCROLL_TO_TOP")
-        //        .background(
-        //            GeometryReader { proxy -> Color in
-        //                DispatchQueue.main.async{
-        //                    if startOffset == 0 {
-        //                        startOffset = proxy.frame(in: .global).minY
-        //                    }
-        //                    let offset = proxy.frame(in: .global).minY
-        //                    scrollViewOffset = offset - startOffset
-        //                }
-        //                    return Color.clear
-        //
-        //            }
     }
     
     var loadMoreButton: some View {
@@ -181,6 +144,7 @@ struct CinemaOptionView: View {
                     Section("Selected categories") {
                         Toggle("Filter by Title", isOn: $vm.filterByAlphabet)
                         Toggle("Filter by Rate", isOn: $vm.filterByRating)
+                        Toggle("Filter by Date", isOn: $vm.filterByDate)
                     }
                     
                 }
