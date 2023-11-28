@@ -22,29 +22,41 @@ final class CinemaVM: ObservableObject {
     @Published var searchQuery: String = ""
     @Published var searchResults: [CinemaModel] = []
     
+    @Published var filterByRating: Bool = false
+    @Published var filterByAlphabet: Bool = false
     
     var movies: [CinemaModel] {
-        if searchQuery.isEmpty {
-            return cinemaItem
-        } else {
-            return searchResults
+        var filteredMovies = cinemaItem
+        
+        if !searchQuery.isEmpty {
+            filteredMovies = filteredMovies.filter { $0.title.lowercased().contains(searchQuery.lowercased()) }
         }
+        
+        if filterByRating {
+            filteredMovies = filteredMovies.sorted { $0.voteAverage > $1.voteAverage }
+        }
+        
+        
+        if filterByAlphabet {
+            filteredMovies = filteredMovies.sorted { $0.title < $1.title }
+        }
+        
+        return filteredMovies
     }
+    
     
     private var cancellables: Set<AnyCancellable> = []
     private var currentPage = 1
     
     init() {
         fetchData()
-        $searchQuery
-            .combineLatest($cinemaItem)
-            .map { searchQuery, cinemaItem in
-                return cinemaItem.filter { movie in
-                    return movie.title.lowercased().contains(searchQuery.lowercased())
-                }
+        Publishers.CombineLatest3($searchQuery, $filterByRating, $filterByAlphabet)
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink { [weak self] _, _, _ in
+                self?.objectWillChange.send()
             }
-            .assign(to: &$searchResults)
-
+            .store(in: &cancellables)
+        
     }
     
     func fetchData() {

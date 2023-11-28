@@ -35,7 +35,9 @@ class ImageLoader: ObservableObject {
                 .sink(receiveCompletion: { _ in },
                       receiveValue: { [weak self] loadedImage in
                     ImageCache.cache[url] = loadedImage
-                    self?.image = loadedImage
+                    DispatchQueue.main.async {
+                                            self?.image = loadedImage
+                                        }
                 })
         }
     }

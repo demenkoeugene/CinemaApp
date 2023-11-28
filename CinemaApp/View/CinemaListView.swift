@@ -11,12 +11,14 @@ struct CinemaListView: View {
     
     @StateObject var vm = CinemaVM()
     @State private var isLoadMoreButtonHidden = false
-    @State var scrollViewOffset: CGFloat = 0
-    @State var startOffset: CGFloat = 0
+//    @State var scrollViewOffset: CGFloat = 0
+//    @State var startOffset: CGFloat = 0
+    
+    @State private var isFilterSheetPresented = false
     
     var body: some View {
         NavigationView {
-            ZStack(alignment: .bottomTrailing) {
+//            ZStack(alignment: .bottomTrailing) {
                 
                 VStack {
                     HStack {
@@ -24,31 +26,43 @@ struct CinemaListView: View {
                             .padding(8)
                             .background(Color(.systemGray6))
                             .cornerRadius(8)
+                        
+                        Button(action: {
+                            isFilterSheetPresented.toggle()
+                        }) {
+                            Image(systemName: "slider.horizontal.3")
+                                .foregroundColor(.blue)
+                                .font(.title2)
+                                .padding(8)
+                        }
+                        .sheet(isPresented: $isFilterSheetPresented) {
+                            CinemaOptionView(vm: vm)
+                        }
                     }
                     .padding([.leading, .trailing], 16)
                     
                     content
                         .navigationTitle("Now Playing")
                 }
-                
-                Button {
-                    withAnimation(.spring()){
-                        // proxyReader.scroll("SCROLL_TO_TOP", anchor: .top)
-                    }
-                } label: {
-                    Image(systemName: "arrow.up")
-                        .padding(12)
-                        .foregroundColor(.white)
-                        .background(.gray)
-                        .clipShape(Circle())
-                }
+//                
+//                Button {
+//                    withAnimation(.spring()){
+//                        // proxyReader.scroll("SCROLL_TO_TOP", anchor: .top)
+//                    }
+//                } label: {
+//                    Image(systemName: "arrow.up")
+//                        .padding(12)
+//                        .foregroundColor(.white)
+//                        .background(.gray)
+//                        .clipShape(Circle())
+//                }
                 .padding(16)
-                .opacity(
-                    withAnimation(.easeInOut){
-                        -scrollViewOffset > 450 ? 1 : 0
-                    }
-                )
-            }
+//                .opacity(
+//                    withAnimation(.easeInOut){
+//                        -scrollViewOffset > 450 ? 1 : 0
+//                    }
+//                )
+            
         }
         .refreshable {
             ImageCache.clearCache()
@@ -60,27 +74,26 @@ struct CinemaListView: View {
     var content: some View {
         GeometryReader { geometry in
             ScrollView {
-//                ScrollViewReader {proxyReader in
-                    switch vm.networkRequestState {
-                    case .idle:
-                        idleView
-                            .frame(width: geometry.size.width)
-                            .frame(minHeight: geometry.size.height)
-                    case .loading:
-                        loadingView
-                            .frame(width: geometry.size.width)
-                            .frame(minHeight: geometry.size.height)
-                    case .loaded:
-                        
-                        
-                        listCinema
-                           
-
-                        
-                    case .failed(let error):
-                        failedView(error: error, geometry: geometry)
-                    }
-               
+                switch vm.networkRequestState {
+                case .idle:
+                    idleView
+                        .frame(width: geometry.size.width)
+                        .frame(minHeight: geometry.size.height)
+                case .loading:
+                    loadingView
+                        .frame(width: geometry.size.width)
+                        .frame(minHeight: geometry.size.height)
+                case .loaded:
+                    
+                    
+                    listCinema
+                    
+                    
+                    
+                case .failed(let error):
+                    failedView(error: error, geometry: geometry)
+                }
+                
             }
         }
     }
@@ -98,31 +111,31 @@ struct CinemaListView: View {
     }
     
     var listCinema: some View {
-        VStack {
+        LazyVStack {
             ForEach(vm.movies) { cinema in
                 NavigationLink(destination: CinemaDetailView(cinemaItem: cinema)) {
+                    
                     CinemaCardView(cinemaItem: cinema)
+                    
                 }
             }
             if !isLoadMoreButtonHidden {
                 loadMoreButton
             }
         }
-        .id("SCROLL_TO_TOP")
-        .background(
-            GeometryReader { proxy -> Color in
-                DispatchQueue.main.async{
-                    if startOffset == 0 {
-                        startOffset = proxy.frame(in: .global).minY
-                    }
-                    let offset = proxy.frame(in: .global).minY
-                    scrollViewOffset = offset - startOffset
-                }
-                    return Color.clear
-                
-            }
-        )
-        
+        //        .id("SCROLL_TO_TOP")
+        //        .background(
+        //            GeometryReader { proxy -> Color in
+        //                DispatchQueue.main.async{
+        //                    if startOffset == 0 {
+        //                        startOffset = proxy.frame(in: .global).minY
+        //                    }
+        //                    let offset = proxy.frame(in: .global).minY
+        //                    scrollViewOffset = offset - startOffset
+        //                }
+        //                    return Color.clear
+        //
+        //            }
     }
     
     var loadMoreButton: some View {
@@ -156,6 +169,35 @@ struct CinemaListView: View {
 }
 
 
+
+struct CinemaOptionView: View {
+    @Environment(\.presentationMode) var presentationMode//for qs
+    @ObservedObject var vm: CinemaVM
+    
+    var body: some View {
+        NavigationView{
+            Form {
+                List{
+                    Section("Selected categories") {
+                        Toggle("Filter by Title", isOn: $vm.filterByAlphabet)
+                        Toggle("Filter by Rate", isOn: $vm.filterByRating)
+                    }
+                    
+                }
+            }.navigationTitle("Filter")
+                .pickerStyle(.inline)
+                .listStyle(.grouped)
+                .toolbar {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Text("Done")
+                    })
+                    .padding(10)
+                }
+        }
+    }
+}
 
 #Preview {
     CinemaListView()

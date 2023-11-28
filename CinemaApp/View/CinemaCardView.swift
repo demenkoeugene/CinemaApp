@@ -11,6 +11,10 @@ struct CinemaCardView: View {
     var vm: ImageLoader = ImageLoader()
     var cinemaItem: CinemaModel
     
+    init(cinemaItem: CinemaModel) {
+        self.cinemaItem = cinemaItem
+    }
+    
     var body: some View {
         ZStack {
             posterView()
